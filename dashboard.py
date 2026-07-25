@@ -124,6 +124,15 @@ st.sidebar.header("Settings")
 detection_mode = st.sidebar.selectbox("Choose Detection Mode", ["All", "Fall Detection", "Fire Detection"])
 show_confidence = st.sidebar.checkbox("Show Confidence Scores", value=True)
 
+# Action Buttons (Highly visible at the top)
+st.sidebar.divider()
+if st.sidebar.button("Start Monitor"):
+    st.session_state.monitoring_active = True
+if st.sidebar.button("Stop Monitor"):
+    st.session_state.monitoring_active = False
+    st.session_state.fall_start_time = None
+    st.session_state.alert_triggered = False
+
 st.sidebar.divider()
 st.sidebar.header("⚙️ System Configuration")
 st.sidebar.info(f"Inference Device: {device.upper()}")
@@ -143,14 +152,6 @@ else:
 st.sidebar.divider()
 st.sidebar.header("🚨 Alert History")
 alert_history_placeholder = st.sidebar.empty()
-
-# Action Buttons
-if st.sidebar.button("Start Monitor"):
-    st.session_state.monitoring_active = True
-if st.sidebar.button("Stop Monitor"):
-    st.session_state.monitoring_active = False
-    st.session_state.fall_start_time = None
-    st.session_state.alert_triggered = False
 
 # Main Dashboard Layout
 col1, col2 = st.columns([2, 1])
