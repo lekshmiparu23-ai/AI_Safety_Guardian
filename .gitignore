@@ -11,3 +11,6 @@ venv/
 venv_new/
 .venv/
 env/
+
+# Model weights
+*.pt
