@@ -1,15 +1,28 @@
 import cv2
 import numpy as np
 from ultralytics import YOLO
+import torch
 
-def detect_fall(frame, model):
+def detect_fall(frame, model, draw_on=None):
     """
     Detects if a person has fallen based on pose estimation.
-    Returns: {"fall_detected": bool, "confidence": float}
+    Returns: {"fall_detected": bool, "confidence": float, "boxes": list}
     """
-    results = model(frame, verbose=False)
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    results = model(frame, imgsz=640, device=device, verbose=False)
+    
     fall_detected = False
     confidence = 0.0
+    detected_boxes = []
+
+    scale_w = 1.0
+    scale_h = 1.0
+    if draw_on is not None:
+        scale_w = draw_on.shape[1] / frame.shape[1]
+        scale_h = draw_on.shape[0] / frame.shape[0]
+        canvas = draw_on
+    else:
+        canvas = frame
 
     for result in results:
         boxes = result.boxes
@@ -21,27 +34,34 @@ def detect_fall(frame, model):
             conf = float(box.conf[0])
 
             # Check aspect ratio (width > height indicates horizontal posture)
-            aspect_ratio = w / h
+            aspect_ratio = w / h if h > 0 else 0.0
+            is_fall = aspect_ratio > 1.2 and conf > 0.5
             
-            # Simple logic: if someone is significantly wider than they are tall, 
-            # they are likely lying down.
-            if aspect_ratio > 1.2 and conf > 0.5:
+            if is_fall:
                 fall_detected = True
-                confidence = conf
+                confidence = max(confidence, conf)
                 
-                # Draw bounding box and label
-                cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 0, 255), 2)
-                cv2.putText(frame, f"Fall Risk Detected! ({conf:.2f})", (int(x1), int(y1) - 10),
+            detected_boxes.append({
+                "box": [x1, y1, x2, y2],
+                "conf": conf,
+                "is_fall": is_fall
+            })
+
+            # Draw on canvas using scaled coordinates
+            sx1, sy1, sx2, sy2 = int(x1 * scale_w), int(y1 * scale_h), int(x2 * scale_w), int(y2 * scale_h)
+            if is_fall:
+                cv2.rectangle(canvas, (sx1, sy1), (sx2, sy2), (0, 0, 255), 2)
+                cv2.putText(canvas, f"Fall Risk Detected! ({conf:.2f})", (sx1, sy1 - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
             else:
-                # Normal posture
-                cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-                cv2.putText(frame, f"Person ({conf:.2f})", (int(x1), int(y1) - 10),
+                cv2.rectangle(canvas, (sx1, sy1), (sx2, sy2), (0, 255, 0), 2)
+                cv2.putText(canvas, f"Person ({conf:.2f})", (sx1, sy1 - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
     return {
         "fall_detected": fall_detected,
-        "confidence": confidence
+        "confidence": confidence,
+        "boxes": detected_boxes
     }
 
 if __name__ == "__main__":
@@ -57,9 +77,8 @@ if __name__ == "__main__":
         if not ret:
             break
 
-        processed_frame, is_fall, conf = detect_fall(frame, model)
-        
-        cv2.imshow("Fall Detection Test", processed_frame)
+        res = detect_fall(frame, model)
+        cv2.imshow("Fall Detection Test", frame)
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
