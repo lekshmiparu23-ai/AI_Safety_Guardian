@@ -1,234 +1,124 @@
----
-title: AI Safety Guardian
-emoji: 🛡️
-colorFrom: blue
-colorTo: yellow
-sdk: docker
-app_port: 7860
-pinned: false
----
+<div align="center">
+  <img src="assets/banner.png" alt="AI Safety Guardian Banner" width="100%">
+</div>
 
-# 🛡️ AI Safety Guardian
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/ultralytics/ultralytics"><img src="https://img.shields.io/badge/YOLOv8-Ultralytics-purple?style=flat-square" alt="YOLOv8/Ultralytics"></a>
+  <a href="https://opencv.org/"><img src="https://img.shields.io/badge/OpenCV-Computer_Vision-green?style=flat-square&logo=opencv&logoColor=white" alt="OpenCV"></a>
+  <a href="https://streamlit.io/"><img src="https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License"></a>
+</p>
 
 <div align="center">
-
-![AI Safety Guardian](https://img.shields.io/badge/AI%20Safety-Guardian-red?style=for-the-badge&logo=shield&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white)
-![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-purple?style=for-the-badge)
-![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
-![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge&logo=opencv&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
-
-**Real-time AI-powered safety monitoring system for fall detection and fire detection**  
-*Built with YOLOv8, OpenCV, and Streamlit — with automated email alerts*
-
-[![GitHub Stars](https://img.shields.io/github/stars/muhammedshemeer/AI_Safety_Guardian?style=for-the-badge)](https://github.com/muhammedshemeer/AI_Safety_Guardian/stargazers)
-
+  <h1>AI Safety Guardian</h1>
+  <p><strong>Real-Time Fall and Fire Detection System with Advanced Escalation</strong></p>
 </div>
 
 ---
 
-## 🎬 Demo Video
+## 📖 Overview
 
-> See the system detecting falls and fire **in real-time** with live confidence scores and instant alerts!
+**AI Safety Guardian** is a computer vision-based safety monitoring system designed to detect human falls and fire or smoke hazards in real time. Leveraging deep learning and classical image processing techniques, it monitors video feeds continuously to detect safety-critical incidents, reducing emergency response latency in high-risk zones such as industrial warehouses, elderly care facilities, and smart homes.
 
-🎬 [▶️ Watch Live Demo Video](demo.mp4)
+The system uses **YOLOv8-Pose** estimation to analyze skeletal joints and compute body angles to confirm human falls. To reduce false positives, it incorporates a temporal confirmation logic requiring a fall to persist across multiple frames before validating the threat. For fire and smoke, it integrates **YOLOv8** object classification with HSV-based color masking to detect flame flicker and shapes.
 
----
-
-## 📸 Screenshots
-
-> **Real detections captured live — YOLOv8 running on actual webcam feed**
-
-| 🧍 Fall Detection — CONFIRMED FALL (Conf: 0.74) | 🔥 Fire Detection — FIRE DETECTED (Conf: 0.85) |
-|:-:|:-:|
-| ![Fall Detection](assets/screenshot1.png) | ![Fire Detection](assets/screenshot2.png) |
-
-> ⬆️ **Left:** System detected a confirmed fall — red bounding box on person, emergency alert triggered, alert logged with timestamp `22:08:36`
->
-> ⬆️ **Right:** Fire mask detected in frame — fire confidence 0.85, "Fire/Smoke risk detected!" alert shown, alert logged at `22:08:12`
+It supports two distinct input modes: **Live Webcam** (for local/edge deployment) and **Upload Video** (for cloud-safe demonstration environments). When a safety threat is verified, the system triggers a multi-channel alert escalation—including a localized audio alarm and automatic email notifications via SMTP. A modern, centralized Security Operations Center (SOC) dashboard built with **Streamlit** displays status meters, system health, and an active incident history log.
 
 ---
 
-## 🎯 Project Overview
+## ✨ Features
 
-**AI Safety Guardian** is a real-time safety monitoring application built using **Computer Vision** and **Deep Learning**. It uses **YOLOv8** pose estimation and object detection models to continuously monitor live video feeds, detect potential dangers like **human falls** and **fire/smoke**, and instantly trigger **email alerts + audio alarms**.
-
-> 🏢 **Real-world use case:** Hospitals, factories, elderly care homes, and warehouses need 24/7 human monitoring — this system automates that at near-zero cost.
-
----
-
-## ✨ Key Features
-
-| Feature | Description |
-|---------|-------------|
-| 🧍 **Fall Detection** | YOLOv8-Pose detects human posture and flags dangerous falls |
-| 🔥 **Fire Detection** | YOLOv8 + color masking to identify fire or smoke in real-time |
-| ⏱️ **3-Second Confirmation Logic** | Smart fall confirmation system — avoids false alarms by confirming fall persists for 3 seconds |
-| 📧 **Email Alerts** | Instant email notification sent to configured receiver on confirmed threat |
-| 🔔 **Audio Alarm** | Plays alarm.wav immediately on threat detection |
-| 📊 **Live Dashboard** | Real-time Streamlit dashboard showing live feed, confidence scores, and alert history |
-| 🗂️ **Alert History** | Timestamped log of all past alerts displayed in sidebar |
-| 🎮 **Demo Video Mode** | Upload a video file to test the system without a webcam (cloud-compatible) |
+* **Real-time fall detection** with confidence scoring and multi-frame confirmation logic
+* **Real-time fire/smoke detection** utilizing a combined deep-learning and HSV color mask filtering approach to reduce false positives
+* **Dual input modes**: Live Webcam (edge deployment) and Upload Video (cloud-safe testing)
+* **Automated email alerts** containing detailed event metadata, confidence scores, and timestamps
+* **Audio alarm system** to warn on-site personnel immediately upon threat confirmation
+* **Live dashboard** containing system status meters, threat level gauges, and a continuous alert history log
+* **Graceful fallback messaging** that handles missing webcam devices in cloud environments automatically
 
 ---
 
-## 🏗️ System Architecture
+## 📷 Dashboard Preview
 
-```
-AI_Safety_Guardian/
-├── dashboard.py         # Main Streamlit application & UI
-├── fall_detection.py    # YOLOv8-Pose fall detection logic
-├── fire_detection.py    # YOLOv8 + color mask fire detection
-├── alert_system.py      # Email alerts, alarm, alert logging
-├── alarm.wav            # Alarm sound file
-├── yolov8n-pose.pt      # YOLOv8 pose estimation model
-├── yolov8n.pt           # YOLOv8 object detection model
-├── requirements.txt     # Python dependencies
-├── .env.example         # Environment variable template
-└── README.md            # Documentation
-```
+| | |
+| :---: | :---: |
+| ![Live Detection View](assets/dashboard_upload.png) | ![Fire & Fall Alert](assets/dashboard_alert.png) |
+
+**_📹 Live Detection View — Real-time person tracking on uploaded warehouse footage._**
+
+**_🚨 Fire & Fall Alert — Simultaneous hazard detection triggering confirmed fall alert and live email notification._**
 
 ---
 
-## 🧠 Technical Implementation
+## 📹 Watch Full Demo Video
 
-### Fall Detection Logic
-- Uses **YOLOv8n-pose** to extract 17 body keypoints per person
-- Analyzes keypoint positions (shoulder, hip, knee, ankle) to determine body angle
-- Implements **3-second persistence check** — fall is only confirmed if it persists, preventing false alarms
-- Confidence score displayed in real-time on dashboard
+📹 [Watch Full Demo Video](https://drive.google.com/file/d/1kIysGWD1BfSRI2qp1CuekzNjLl3ybu8x/view?usp=drive_link)
 
-### Fire Detection Logic
-- Uses **YOLOv8n** object detector for smoke/fire object classification
-- Combined with **HSV color masking** for reliable fire color range detection
-- Dual-method approach increases detection accuracy
-
-### Alert Escalation System
-```
-Threat Detected
-    ↓
-3-Second Confirmation (Fall) / Instant (Fire)
-    ↓
-Audio Alarm (alarm.wav) + Email Alert
-    ↓
-Alert Logged with Timestamp → Dashboard History
-```
+*This demo video showcases the system performing live detections, triggering the local audio alarm sound, and sending real-time SMTP email notifications end-to-end.*
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Tech Stack
 
-### Prerequisites
-- Python 3.10+
-- Webcam (for live mode) or video file (for demo mode)
+| Technology | Usage / Role |
+| :--- | :--- |
+| **Python** | Core backend logic, multi-threaded alert execution, and file handling |
+| **YOLOv8 (Ultralytics)** | Pose estimation (skeleton keypoints) and object detection models |
+| **OpenCV** | Video capture, real-time image processing, and color masking filters |
+| **Streamlit** | Frontend Security Operations Center (SOC) dashboard and live video renderer |
+| **SMTP** | Automatic email notifications sent to administrators during safety emergencies |
+| **Antigravity AI** | AI assistant utilized for UI engineering and layout refinement |
 
-### Installation
+---
 
+## ⚠️ Note on Deployment
+
+> [!IMPORTANT]
+> This system performs real-time video inference using YOLOv8, which is compute-intensive and exceeds the CPU limits of most free-tier cloud platforms (Streamlit Community Cloud, Hugging Face Spaces). The demo video above shows full local execution with live detection, alerting, and email notification working end-to-end. This reflects real-world deployment patterns for edge-AI safety systems, which typically run on local or on-premise hardware rather than shared cloud infrastructure.
+
+---
+
+## 🚀 Installation & Setup
+
+Follow these steps to run the application locally on your machine.
+
+### 1. Clone the Repository
 ```bash
-# 1. Clone the repository
 git clone https://github.com/muhammedshemeer/AI_Safety_Guardian.git
 cd AI_Safety_Guardian
+```
 
-# 2. Install dependencies
+### 2. Install Requirements
+Ensure Python 3.10 or higher is installed, then run:
+```bash
 pip install -r requirements.txt
-
-# 3. Set up environment variables
-cp .env.example .env
 ```
 
-### Configure Email Alerts
-
-Open `.env` and add your Gmail credentials:
-
+### 3. Configure Email Credentials
+To enable automated email alerts, create a `.env` file in the root directory (based on `.env.example`) and fill in your details:
 ```env
-EMAIL_SENDER=yourgmail@gmail.com
+EMAIL_SENDER="your_gmail@gmail.com"
 EMAIL_PASSWORD="your_16_char_app_password"
-EMAIL_RECEIVER=receiver_email@gmail.com
+EMAIL_RECEIVER="recipient_email@gmail.com"
 ```
+> *Note: For Gmail accounts, you will need to generate a 16-character App Password under your Google Account Security settings.*
 
-> 💡 **How to get Gmail App Password:** Go to Google Account → Security → 2-Step Verification → App Passwords → Generate
-
-### Run the App
-
+### 4. Run the Streamlit Application
 ```bash
 streamlit run dashboard.py
 ```
-
-Open `http://localhost:8501` in your browser.
-
----
-
-
-
-## 📦 Dependencies
-
-```txt
-streamlit
-opencv-python
-ultralytics
-numpy
-python-dotenv
-```
-
----
-
-## 🔮 Future Improvements
-
-- [ ] 📱 SMS alerts via Twilio
-- [ ] 🌙 Night vision / low-light enhancement
-- [ ] 👤 Multi-person tracking with individual IDs
-- [ ] 🔫 Weapon / intrusion detection module
-- [ ] 📁 Alert history export to CSV
-- [ ] 📡 RTSP IP camera stream support
-
----
-
-## 🧑‍💻 Author
-
-**Mohammed Shemeer**  
-B.Tech AI & ML — Dhanalakshmi Srinivasan University, Trichy  
-AI/ML Intern @ V-Dart
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Mohammed%20Shemeer-blue?style=flat-square&logo=linkedin)](https://linkedin.com/in/mohammed-shemeer-aiml)
-[![GitHub](https://img.shields.io/badge/GitHub-muhammedshemeer-black?style=flat-square&logo=github)](https://github.com/muhammedshemeer)
+Open `http://localhost:8501` in your web browser.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2026 Mohammed Shemeer
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-```
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
-
-⭐ **If you found this useful, give it a star!** ⭐
-
-*Built with ❤️ using Python, YOLOv8, and Streamlit*
-
+  <p>Developed by <strong><a href="https://github.com/muhammedshemeer">Mohammed Shemeer</a></strong></p>
+  <p><em>Built as a final-year AI/ML project.</em></p>
 </div>
