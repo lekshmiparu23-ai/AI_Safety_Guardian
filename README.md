@@ -120,5 +120,4 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 <div align="center">
   <p>Developed by <strong><a href="https://github.com/muhammedshemeer">Mohammed Shemeer</a></strong></p>
-  <p><em>Built as a final-year AI/ML project.</em></p>
 </div>
