@@ -121,9 +121,3 @@ Open `http://localhost:8501` in your web browser.
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
----
-
-<div align="center">
-  <p>Developed by <strong><a href="https://github.com/muhammedshemeer">Mohammed Shemeer and CO - author <a href="https://github.com/lekshmiparu23-ai">Lekshmi Maniyan</a></strong></p>
-  
-</div>
