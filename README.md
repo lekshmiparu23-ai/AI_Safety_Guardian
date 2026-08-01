@@ -124,7 +124,6 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ---
 
 <div align="center">
-  <p>Developed by <strong><a href="https://github.com/muhammedshemeer">Mohammed Shemeer</a></strong></p>
-    <p>Developed by <strong><a href="https://github.com/lekshmiparu23-ai">Lekshmi Maniyan</a></strong></p>
+  <p>Developed by <strong><a href="https://github.com/muhammedshemeer">Mohammed Shemeer and CO - author <a href="https://github.com/lekshmiparu23-ai">Lekshmi Maniyan</a></strong></p>
   
 </div>
